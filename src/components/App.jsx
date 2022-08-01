@@ -1,41 +1,44 @@
-import { useRef, useEffect, useState, useMemo } from 'react';
+import { useRef, useEffect,  useMemo } from 'react';
 import NoTodos from './NoTodos';
 import ToDoForm from './ToDoForm';
 import TodoList from './TodoList';
 import '../reset.css';
 import '../App.css';
-
-
-
-
-
+import '../hooks/useLocalStorage';
+import useLocalStorage from '../hooks/useLocalStorage';
 
 
 function App() {
-const [name, setName] = useState('');
-const nameInputEl = useRef(null);
-const [todos, setTodos] = useState([
-  {
-    id: 1,
-    title: 'Finish React Series',
-    isComplete: false,
-    isEditing: false,
-  },
-  {
-    id: 2,
-    title: 'Go Grocery',
-    isComplete: false,
-    isEditing: false,
-  },
-  {
-    id: 3,
-    title: 'Take over the world',
-    isComplete: false,
-    isEditing: false,
-  },
-]);
+// const [name, setName] = useState('');
+const [name, setName] = useLocalStorage('name', '');
 
-const [idForTodo, setidForTodo] = useState(4);
+
+const nameInputEl = useRef(null);
+const [todos, setTodos] = useLocalStorage('todos', []);
+// const [todos, setTodos] = useState([
+//   {
+//     id: 1,
+//     title: 'Finish React Series',
+//     isComplete: false,
+//     isEditing: false,
+//   },
+//   {
+//     id: 2,
+//     title: 'Go Grocery',
+//     isComplete: false,
+//     isEditing: false,
+//   },
+//   {
+//     id: 3,
+//     title: 'Take over the world',
+//     isComplete: false,
+//     isEditing: false,
+//   },
+// ]);
+
+// const [idForTodo, setidForTodo] = useState(4);
+const [idForTodo, setidForTodo] = useLocalStorage('idForTodo', 1);
+
 
 function addTodo(todo) {
 
@@ -146,10 +149,18 @@ useEffect(() => {
   // console.log('use effect running')
   nameInputEl.current.focus();
 
+  // setName(JSON.parse(localStorage.getItem('name')) ?? '');
+
   return function cleanup () {
     // console.log('cleanup')
   }
 });
+
+function handleNameInput(event) {
+  setName(event.target.value);
+  // localStorage.setItem('name', JSON.stringify(event.target.value));
+
+}
 
   return (
     <div className="todo-app-container">
@@ -163,7 +174,7 @@ useEffect(() => {
   className="todo-input" 
   placeholder="What is your name?"
   value={name}
-  onChange={event => setName(event.target.value)}
+  onChange={handleNameInput}
   >
   </input>
 </form>

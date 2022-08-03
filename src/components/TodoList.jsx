@@ -5,6 +5,7 @@ import TodoCheckAll from './TodoCheckAll';
 import TodoFilters from './TodoFilters';
 import useToggle from '../hooks/useToggle';
 import { TodosContext } from '../context/TodosContext';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
 
 function TodoList() {
@@ -71,9 +72,17 @@ function deleteTodo(id) {
 
   return (
     <>
-  <ul className="todo-list">
+<TransitionGroup 
+component="ul"
+className="todo-list"
+> 
         {todosFiltered().map((todo, index) => (
-          <li key={todo.id} className="todo-item-container">
+          <CSSTransition 
+          key={todo.id}
+          timeout={300} 
+          classNames="slide-horizontal"
+          >
+          <li className="todo-item-container">
             <div className="todo-item">
               <input 
               type="checkbox" 
@@ -122,33 +131,42 @@ function deleteTodo(id) {
               </svg>
             </button>
           </li>
+          </CSSTransition>
        ))}
-        </ul>
+       </TransitionGroup>
 
 <div>
 <button onClick={setFeaturesOneVisible} className="button">Features One Toggle</button>
 <button onClick={setFeaturesTwoVisible} className="button">Features Two Toggle</button>
 </div>
 
-{isFeaturesOneVisible && (
 
+<CSSTransition
+in={isFeaturesOneVisible}
+timeout={300}
+classNames="slide-vertical"
+unmountOnExit
+> 
         <div className="check-all-container">
-        <TodoCheckAll 
-        completeAllTodos />
+        <TodoCheckAll />
          
          <TodoItemsRemaining />
         </div>
-        )}
+</CSSTransition>
 
-{isFeaturesTwoVisible && ( 
+<CSSTransition
+in={isFeaturesTwoVisible}
+timeout={300}
+classNames="slide-vertical"
+unmountOnExit
+>
         <div className="other-buttons-container">
-        <TodoFilters 
-        />
+        <TodoFilters />
           <div>
        <TodoClearCompleted />
           </div>
         </div>
-        )}
+        </CSSTransition>
         </>
   );
 }

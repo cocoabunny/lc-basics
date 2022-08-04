@@ -60,7 +60,7 @@ function handleNameInput(event) {
       setFilter,
       }}
     > 
-    <div className="todo-app-container">
+   
       <div className="todo-app">
       <div className="name-container">
 <h2>What is your name?</h2>
@@ -114,7 +114,7 @@ unmountOnExit
 ><NoTodos />
 </CSSTransition> */}
     </div>
-    </div>
+
     </TodosContext.Provider>
   );
 }
